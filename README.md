@@ -64,3 +64,50 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Endpoints
+
+### GET Student Details
+**Endpoint:**
+```http
+GET localhost:8000/api/v1/student/
+```
+#### Authorization
+- Type: Bearer Token
+- Token: 9|oqjQT4RNddgIdw64wGsyqlq4hEbiMkEmECv072mzad780480
+- User Login
+
+Endpoint:
+
+### User login
+**Endpoint:**
+```http
+POST localhost:8000/api/v1/login
+```
+#### Body
+- Type: raw (json)
+- JSON:
+```json
+{
+    "email": "katelyn31@example.com",
+    "password": "password"
+}
+```
+
+### User Logout
+**Endpoint:**
+```http
+POST localhost:8000/api/v1/logout
+```
+#### Authorization
+- Type: Bearer Token
+- Token: 9|oqjQT4RNddgIdw64wGsyqlq4hEbiMkEmECv072mzad780480
+#### Body
+- Type: raw (json)
+- JSON:
+```json
+{
+    "email": "katelyn31@example.com",
+    "password": "password"
+}
+```
