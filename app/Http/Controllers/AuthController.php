@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,15 +12,26 @@ class AuthController extends Controller
     {
         if (Auth::attempt($request->only('email', 'password'))) {
 
-            $token = $request->user()->createToken('student', ['student-index']);
+            /** @var User */
+            $user = Auth::user();
 
-            return response('Authorized', 200, ['token' => $token]);
+            $token = $user->createToken('student', ['student-index']);
+
+            return response('Authorized', 200, ["Token" => $token->plainTextToken, "Type" => "Bearer"]);
         }
 
         return response('Not Authorized', 403);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
+        /** @var User */
+        $user = Auth::user();
+
+        $token = $user->currentAccessToken();
+
+        $token->delete();
+
+        return response('Token Revoked', 200);
     }
 }
