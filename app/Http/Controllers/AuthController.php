@@ -23,14 +23,14 @@ class AuthController extends Controller
         return response('Not Authorized', 403);
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
         /** @var User */
         $user = Auth::user();
 
         $token = $user->currentAccessToken();
 
-        $token->delete();
+        $token->delete;
 
         return response('Token Revoked', 200);
     }
