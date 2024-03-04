@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Responses\SuccessResponse;
+use App\Http\Responses\UnauthenticatedResponse;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class AuthController extends Controller
 {
@@ -15,12 +19,14 @@ class AuthController extends Controller
             /** @var User */
             $user = Auth::user();
 
-            $token = $user->createToken('student', ['student-index']);
+            $token = $user->createToken('admin', ['student'/*, 'student-detail', 'student-manage'*/]);
 
-            return response('Authorized', 200, ["Token" => $token->plainTextToken, "Type" => "Bearer"]);
+            $headers = ["Token" => $token->plainTextToken, "Type" => "Bearer"];
+            
+            return response()->json('Authorized', Response::HTTP_OK, $headers);
         }
 
-        return response('Not Authorized', 403);
+        throw new AccessDeniedHttpException('');
     }
 
     public function logout()
@@ -30,8 +36,8 @@ class AuthController extends Controller
 
         $token = $user->currentAccessToken();
 
-        $token->delete;
+        $token->delete();
 
-        return response('Token Revoked', 200);
+        return response()->json('Token Revoked', Response::HTTP_OK);
     }
 }
