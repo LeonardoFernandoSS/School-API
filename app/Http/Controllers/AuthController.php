@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Responses\SuccessResponse;
-use App\Http\Responses\UnauthenticatedResponse;
 use App\Models\User;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class AuthController extends Controller
 {
@@ -19,14 +17,14 @@ class AuthController extends Controller
             /** @var User */
             $user = Auth::user();
 
-            $token = $user->createToken('admin', ['student'/*, 'student-detail', 'student-manage'*/]);
+            $token = $user->createToken('admin', ['student', 'student-detail', 'student-manage']);
 
             $headers = ["Token" => $token->plainTextToken, "Type" => "Bearer"];
             
             return response()->json('Authorized', Response::HTTP_OK, $headers);
         }
 
-        throw new AccessDeniedHttpException('');
+        throw new AuthenticationException('');
     }
 
     public function logout()
