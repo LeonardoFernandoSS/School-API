@@ -24,6 +24,6 @@ Route::prefix('v1')->group(function () {
 
         Route::get('logout', [AuthController::class, 'logout']);
 
-        Route::resource('student', StudentController::class);
+        Route::resource('student', StudentController::class)->except(['edit','create']);
     });
 });
