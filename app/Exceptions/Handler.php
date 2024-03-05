@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Response;
@@ -43,16 +44,16 @@ class Handler extends ExceptionHandler
             return response()->json(['message' => 'Not found'], Response::HTTP_NOT_FOUND);
         }
 
-        if ($exception instanceof UnauthorizedHttpException) {
+        if ($exception instanceof UnauthorizedHttpException || $exception instanceof AuthorizationException) {
             return response()->json(['message' => 'Unauthorized'], Response::HTTP_FORBIDDEN);
         }
 
         if ($exception instanceof MissingAbilityException) {
-            return response()->json(['message' => 'Missing Ability'], Response::HTTP_FORBIDDEN);
+            return response()->json(['message' => 'Missing ability'], Response::HTTP_FORBIDDEN);
         }
 
-        dd($exception);
+        echo $exception; // TODO: Apenas dev
 
-        return parent::render($request, $exception);
+        // return response()->json(['message' => 'Internal server erro'], Response::HTTP_INTERNAL_SERVER_ERROR); // TODO: Apenas prod
     }
 }
