@@ -19,24 +19,4 @@ class StudentPolicy
     {
         return $user->tokenCan('student-manage');
     }
-
-    public function createStudent(User $user)
-    {
-        return $user->tokenCan('student-manage');
-    }
-
-    public function editStudent(User $user, Student $student)
-    {
-        return $user->tokenCan('student-manage');
-    }
-
-    public function deleteStudent(User $user, Student $student)
-    {
-        return $user->tokenCan('student-manage');
-    }
-
-    public function detailStudent(User $user, Student $student)
-    {
-        return $user->tokenCan('student-detail');
-    }
 }
