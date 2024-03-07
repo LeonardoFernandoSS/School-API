@@ -8,7 +8,6 @@ use App\Http\Requests\Student\UpdateRequest;
 use App\Http\Resources\PaginateResource;
 use App\Http\Resources\StudentDetailResource;
 use App\Http\Resources\StudentResource;
-use App\Models\Student;
 use App\Services\StudentService;
 use Illuminate\Http\Response;
 
@@ -17,6 +16,8 @@ class StudentController extends Controller
     public function __construct(private StudentService $studentService)
     {
         $this->middleware('ability:student');
+        $this->middleware('ability:student-manage')->except(['index', 'show']);
+        $this->middleware('ability:student-detail')->only('show');
     }
 
     public function index(SearchRequest $request)
@@ -34,8 +35,6 @@ class StudentController extends Controller
 
     public function store(StoreRequest $request)
     {
-        $this->authorize('create-student', Student::class);
-
         $student = $this->studentService->createStudent($request->validated());
 
         $route = route('student.show', ['student' => $student->id]);
@@ -48,8 +47,6 @@ class StudentController extends Controller
     {
         $student = $this->studentService->findStudent($id);
 
-        $this->authorize('detail-student', $student);
-
         $resource = new StudentDetailResource($student);
 
         return response()->json($resource, Response::HTTP_OK);
@@ -59,8 +56,6 @@ class StudentController extends Controller
     {
         $student = $this->studentService->findStudent($id);
 
-        $this->authorize('edit-student', $student);
-
         $this->studentService->updateStudent($student, $request->validated());
 
         return response()->json(status: Response::HTTP_NO_CONTENT);
@@ -69,8 +64,6 @@ class StudentController extends Controller
     public function destroy(string $id)
     {
         $student = $this->studentService->findStudent($id);
-
-        $this->authorize('delete-student', $student);
 
         $this->studentService->deleteStudent($student);
 
