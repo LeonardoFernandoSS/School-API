@@ -6,6 +6,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 use Laravel\Sanctum\Exceptions\MissingAbilityException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -50,6 +51,10 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof MissingAbilityException) {
             return response()->json(['message' => 'Missing ability'], Response::HTTP_FORBIDDEN);
+        }
+
+        if ($exception instanceof ValidationException) {
+            return response()->json(["errors" => $exception->errors()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         echo $exception; // TODO: Apenas dev
