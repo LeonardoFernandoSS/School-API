@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Student\SearchRequest;
+use App\Http\Requests\Student\StoreRequest;
+use App\Http\Requests\Student\UpdateRequest;
 use App\Http\Resources\PaginateResource;
 use App\Http\Resources\StudentDetailResource;
 use App\Http\Resources\StudentResource;
 use App\Models\Student;
 use App\Services\StudentService;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class StudentController extends Controller
@@ -17,11 +19,11 @@ class StudentController extends Controller
         $this->middleware('ability:student');
     }
 
-    public function index(Request $request)
+    public function index(SearchRequest $request)
     {
         $perPage    = $request->query('per_page', 10);
         $page       = $request->query('page', 1);
-        $search     = $request->only(['keyword']);
+        $search     = $request->validated();
 
         $students = $this->studentService->getPaginate($perPage, $page, $search);
 
@@ -30,11 +32,11 @@ class StudentController extends Controller
         return response()->json($resource, Response::HTTP_OK);
     }
 
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         $this->authorize('create-student', Student::class);
 
-        $student = $this->studentService->createStudent($request->all());
+        $student = $this->studentService->createStudent($request->validated());
 
         $route = route('student.show', ['student' => $student->id]);
         $headers = ["Location", $route];
@@ -53,13 +55,13 @@ class StudentController extends Controller
         return response()->json($resource, Response::HTTP_OK);
     }
 
-    public function update(Request $request, string $id)
+    public function update(UpdateRequest $request, string $id)
     {
         $student = $this->studentService->findStudent($id);
 
         $this->authorize('edit-student', $student);
 
-        $this->studentService->updateStudent($student, $request->all());
+        $this->studentService->updateStudent($student, $request->validated());
 
         return response()->json(status: Response::HTTP_NO_CONTENT);
     }
