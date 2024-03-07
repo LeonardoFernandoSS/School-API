@@ -15,6 +15,11 @@ class StudentPolicy
         //
     }
 
+    public function listDeletedStudent(User $user)
+    {
+        return $user->tokenCan('student-manage');
+    }
+
     public function createStudent(User $user)
     {
         return $user->tokenCan('student-manage');
