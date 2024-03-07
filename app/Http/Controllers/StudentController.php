@@ -2,31 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\StatusEnum;
+use App\Http\Resources\PaginateResource;
+use App\Http\Resources\StudentDetailResource;
+use App\Http\Resources\StudentResource;
 use App\Models\Student;
+use App\Services\StudentService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class StudentController extends Controller
 {
-    public function __construct()
+    public function __construct(private StudentService $studentService)
     {
         $this->middleware('ability:student');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $students = Student::all();
+        $perPage    = $request->query('per_page', 10);
+        $page       = $request->query('page', 1);
+        $search     = $request->only(['keyword']);
 
-        return response()->json($students, Response::HTTP_OK);
+        $students = $this->studentService->getPaginate($perPage, $page, $search);
+
+        $resource = new PaginateResource($students, StudentResource::class);
+
+        return response()->json($resource, Response::HTTP_OK);
     }
 
     public function store(Request $request)
     {
         $this->authorize('create-student', Student::class);
 
-        $student = Student::create($request->all());
+        $student = $this->studentService->createStudent($request->all());
+
         $route = route('student.show', ['student' => $student->id]);
         $headers = ["Location", $route];
 
@@ -35,38 +44,33 @@ class StudentController extends Controller
 
     public function show(string $id)
     {
-        $student = Student::find($id);
-
-        if (is_null($student)) throw new NotFoundHttpException('');
+        $student = $this->studentService->findStudent($id);
 
         $this->authorize('detail-student', $student);
 
-        return response()->json($student, Response::HTTP_OK);
+        $resource = new StudentDetailResource($student);
+
+        return response()->json($resource, Response::HTTP_OK);
     }
 
     public function update(Request $request, string $id)
     {
-        $student = Student::find($id);
-
-        if (is_null($student)) throw new NotFoundHttpException('');
+        $student = $this->studentService->findStudent($id);
 
         $this->authorize('edit-student', $student);
 
-        $student->update($request->all());
+        $this->studentService->updateStudent($student, $request->all());
 
         return response()->json(status: Response::HTTP_NO_CONTENT);
     }
 
     public function destroy(string $id)
     {
-        $student = Student::find($id);
-
-        if (is_null($student)) throw new NotFoundHttpException('');
+        $student = $this->studentService->findStudent($id);
 
         $this->authorize('delete-student', $student);
 
-        $student->status = StatusEnum::DELETE;
-        $student->save();
+        $this->studentService->deleteStudent($student);
 
         return response()->json(status: Response::HTTP_NO_CONTENT);
     }
