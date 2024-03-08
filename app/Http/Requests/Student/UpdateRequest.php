@@ -2,10 +2,15 @@
 
 namespace App\Http\Requests\Student;
 
+use App\Repositories\Interfaces\StudentRepositoryInterface;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateRequest extends FormRequest
 {
+    public function __construct(private StudentRepositoryInterface $studentRepository)
+    {
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -21,10 +26,13 @@ class UpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->input('student');
+        $id = $this->route('student');
+        
+        $student = $this->studentRepository->find($id);
 
         return [
-            'name' => 'required|string|max:60|min:5|unique:students,name,'.$id,
+            'name' => 'required|string|max:60|min:5|unique:users,name,' . $student->user_id,
+            'email' => 'required|email|max:60|min:5|unique:users,email,' . $student->user_id,
         ];
     }
 }
