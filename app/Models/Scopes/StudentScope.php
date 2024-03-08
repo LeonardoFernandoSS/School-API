@@ -3,6 +3,7 @@
 namespace App\Models\Scopes;
 
 use App\Enums\StatusEnum;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
@@ -17,7 +18,7 @@ class StudentScope implements Scope
     {
         if (Gate::denies('listDeletedStudent', $model)) {
 
-            $builder->where('status', StatusEnum::ACTIVE);
+            $builder->whereHas(User::class, fn($query) => $query->where('status', StatusEnum::ACTIVE));
         }
     }
 }
