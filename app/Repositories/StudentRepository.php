@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class StudentRepository extends EloquentGenericRepository implements StudentRepositoryInterface
 {
@@ -29,18 +30,24 @@ class StudentRepository extends EloquentGenericRepository implements StudentRepo
 
     public function create(array $data): Model
     {
-        $user = User::create(Arr::only($data, ['name', 'email', 'remember_token']));
+        return DB::transaction(function () use ($data) {
 
-        $data['user_id'] = $user->id;
+            $user = User::create(Arr::only($data, ['name', 'email', 'remember_token']));
 
-        return $user->student()->create(Arr::only($data, ['user_id']));
+            $data['user_id'] = $user->id;
+
+            return $user->student()->create(Arr::only($data, ['user_id']));
+        });
     }
 
     public function update(Model $student, array $data): Model
     {
-        $student->user->update(Arr::only($data, ['name', 'email']));
+        return DB::transaction(function () use ($student, $data) {
 
-        return $student;
+            $student->user->update(Arr::only($data, ['name', 'email']));
+
+            return $student;
+        });
     }
 
     public function delete(Model $student): Student
