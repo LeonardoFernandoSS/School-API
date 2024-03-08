@@ -4,10 +4,12 @@ namespace App\Repositories;
 
 use App\Enums\StatusEnum;
 use App\Models\Student;
+use App\Models\User;
 use App\Repositories\Interfaces\StudentRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Arr;
 
 class StudentRepository extends EloquentGenericRepository implements StudentRepositoryInterface
 {
@@ -25,10 +27,26 @@ class StudentRepository extends EloquentGenericRepository implements StudentRepo
         return $query->paginate($perPage, ['*'], 'page', $page);
     }
 
+    public function create(array $data): Model
+    {
+        $user = User::create(Arr::only($data, ['name', 'email', 'remember_token']));
+
+        $data['user_id'] = $user->id;
+
+        return $user->student()->create(Arr::only($data, ['user_id']));
+    }
+
+    public function update(Model $student, array $data): Model
+    {
+        $student->user->update(Arr::only($data, ['name', 'email']));
+
+        return $student;
+    }
+
     public function delete(Model $student): Student
     {
-        $student->status = StatusEnum::DELETE;
-        $student->save();
+        $student->user->status = StatusEnum::DELETE;
+        $student->user->save();
 
         return $student;
     }
@@ -37,9 +55,9 @@ class StudentRepository extends EloquentGenericRepository implements StudentRepo
     {
         if (!is_null($keyword)) {
 
-            return $builder->where('name', 'like', "%$keyword%");
+            $builder->whereHas(User::class, fn ($query) => $query->where('name', 'like', "%$keyword%"));
         }
 
-        return $builder;        
+        return $builder;
     }
 }

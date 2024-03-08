@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Student;
 use App\Repositories\Interfaces\StudentRepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class StudentService
@@ -21,6 +22,8 @@ class StudentService
 
     public function createStudent(array $data): Student
     {
+        $data['remember_token'] = Str::random(10);
+
         return $this->studentRepository->create($data);
     }
 
