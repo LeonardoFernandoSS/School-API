@@ -15,8 +15,17 @@ class Student extends Model
         'status',
     ];
 
+    protected $guarded = [
+        'user_id'
+    ];
+
     protected static function booted(): void
     {
         static::addGlobalScope(new StudentScope);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
