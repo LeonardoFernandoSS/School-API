@@ -36,7 +36,10 @@ class StudentController extends Controller
 
     public function store(StoreRequest $request)
     {
-        $student = $this->studentService->createStudent($request->validated());
+        $photo = $request->file('photo');
+        $data = $request->validated();
+
+        $student = $this->studentService->createStudent($data, $photo);
 
         $route = route('student.show', ['student' => $student->id]);
         $headers = ["Location", $route];
@@ -57,7 +60,10 @@ class StudentController extends Controller
     {
         $student = $this->studentService->findStudent($id);
 
-        $this->studentService->updateStudent($student, $request->validated());
+        $photo = $request->file('photo');
+        $data = $request->validated();
+
+        $this->studentService->updateStudent($student, $data, $photo);
 
         return response()->json(status: Response::HTTP_NO_CONTENT);
     }
