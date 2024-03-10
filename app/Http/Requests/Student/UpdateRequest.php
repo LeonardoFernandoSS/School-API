@@ -27,13 +27,12 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         $id = $this->route('student');
-        
-        $student = $this->studentRepository->find($id);
 
+        $student = $this->studentRepository->find($id);
+        
         return [
-            'name' => 'required|string|max:60|min:5|unique:users,name,' . $student->user_id,
-            'email' => 'required|email|max:60|min:5|unique:users,email,' . $student->user_id,
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'name' => 'required|string|max:60|min:5|unique:users,name,' . $student->user_id . ',id',
+            'email' => 'required|email|max:60|min:5|unique:users,email,' . $student->user_id . ',id',
         ];
     }
 }
