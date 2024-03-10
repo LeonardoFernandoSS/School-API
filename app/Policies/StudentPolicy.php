@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\Student;
+use App\Enums\AbilityEnum;
 use App\Models\User;
 
 class StudentPolicy
@@ -15,8 +15,8 @@ class StudentPolicy
         //
     }
 
-    public function listDeletedStudent(User $user)
+    public function listDeleted(User $user)
     {
-        return $user->tokenCan('student-manage');
+        return $user->tokenCan(AbilityEnum::STUDENT_MANAGE);
     }
 }

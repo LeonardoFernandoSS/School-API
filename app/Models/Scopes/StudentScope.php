@@ -16,7 +16,7 @@ class StudentScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        if (Gate::denies('listDeletedStudent', $model)) {
+        if (Gate::denies('listDeleted', $model)) {
 
             $builder->whereHas(User::class, fn($query) => $query->where('status', StatusEnum::ACTIVE));
         }
