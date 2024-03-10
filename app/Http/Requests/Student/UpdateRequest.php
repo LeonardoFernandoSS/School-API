@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests\Student;
 
-use App\Repositories\Interfaces\StudentRepositoryInterface;
+use App\Services\StudentService;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateRequest extends FormRequest
 {
-    public function __construct(private StudentRepositoryInterface $studentRepository)
+    public function __construct(private StudentService $studentService)
     {
     }
 
@@ -28,7 +28,7 @@ class UpdateRequest extends FormRequest
     {
         $id = $this->route('student');
 
-        $student = $this->studentRepository->find($id);
+        $student = $this->studentService->findStudent($id);
         
         return [
             'name' => 'required|string|max:60|min:5|unique:users,name,' . $student->user_id . ',id',
