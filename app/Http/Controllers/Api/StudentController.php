@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\AbilityEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Student\SearchRequest;
 use App\Http\Requests\Student\StoreRequest;
@@ -17,9 +18,9 @@ class StudentController extends Controller
 {
     public function __construct(private StudentService $studentService)
     {
-        $this->middleware('ability:student');
-        $this->middleware('ability:student-manage')->except(['index', 'show']);
-        $this->middleware('ability:student-detail')->only('show');
+        $this->middleware('ability:' . AbilityEnum::STUDENT);
+        $this->middleware('ability:' . AbilityEnum::STUDENT_MANAGE)->except(['index', 'show']);
+        $this->middleware('ability:' . AbilityEnum::STUDENT_DETAIL)->only('show');
     }
 
     public function index(SearchRequest $request): JsonResponse

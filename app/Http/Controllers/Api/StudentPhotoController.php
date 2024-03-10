@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\AbilityEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Student\UploadRequest;
 use App\Services\StudentPhotoService;
@@ -13,7 +14,7 @@ class StudentPhotoController extends Controller
 {
     public function __construct(private StudentService $studentService, private StudentPhotoService $studentPhotoService)
     {
-        $this->middleware('abilities:student,student-manage');
+        $this->middleware('ability:' . AbilityEnum::STUDENT_MANAGE);
     }
 
     public function upload(UploadRequest $request, int $student_id): JsonResponse
