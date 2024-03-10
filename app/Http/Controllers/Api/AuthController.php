@@ -3,39 +3,30 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Auth\AuthenticationException;
+use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    public function __construct(private AuthService $authService)
+    {
+    }
+
     public function login(Request $request)
     {
-        if (Auth::attempt($request->only('email', 'password'))) {
+        $credentials = $request->only('email', 'password');
 
-            /** @var User */
-            $user = Auth::user();
+        $token = $this->authService->loginUser($credentials);
 
-            $token = $user->createToken('admin', ['student', 'student-detail', 'student-manage']);
+        $headers = ["Token" => $token->plainTextToken, "Type" => "Bearer"];
 
-            $headers = ["Token" => $token->plainTextToken, "Type" => "Bearer"];
-            
-            return response()->json('Authorized', Response::HTTP_OK, $headers);
-        }
-
-        throw new AuthenticationException('');
+        return response()->json('Authorized', Response::HTTP_OK, $headers);
     }
 
     public function logout()
     {
-        /** @var User */
-        $user = Auth::user();
-
-        $token = $user->currentAccessToken();
-
-        $token->delete();
+        $this->authService->logoutUser();
 
         return response()->json('Token Revoked', Response::HTTP_OK);
     }
