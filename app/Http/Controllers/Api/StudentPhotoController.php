@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Student\UploadRequest;
 use App\Services\StudentPhotoService;
 use App\Services\StudentService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class StudentPhotoController extends Controller
@@ -15,7 +16,7 @@ class StudentPhotoController extends Controller
         $this->middleware('abilities:student,student-manage');
     }
 
-    public function upload(UploadRequest $request, int $student_id)
+    public function upload(UploadRequest $request, int $student_id): JsonResponse
     {
         $photo = $request->file('photo');
 
@@ -28,7 +29,7 @@ class StudentPhotoController extends Controller
         return response()->json('Successfully uploaded', Response::HTTP_OK, $headers);
     }
 
-    public function delete(string $id)
+    public function delete(string $id): JsonResponse
     {
         $student = $this->studentService->findStudent($id);
 
