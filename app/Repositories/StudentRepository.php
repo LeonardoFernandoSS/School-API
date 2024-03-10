@@ -32,7 +32,7 @@ class StudentRepository extends EloquentGenericRepository implements StudentRepo
     {
         return DB::transaction(function () use ($data) {
 
-            $user = User::create(Arr::only($data, ['name', 'email', 'photo_path', 'remember_token']));
+            $user = User::create(Arr::only($data, ['name', 'email', 'password', 'remember_token']));
 
             $data['user_id'] = $user->id;
 
