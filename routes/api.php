@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\StudentController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\StudentPhotoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,5 +25,12 @@ Route::prefix('v1')->group(function () {
         Route::get('logout', [AuthController::class, 'logout']);
 
         Route::resource('student', StudentController::class)->except(['edit','create']);
+
+        Route::prefix('student/{student}')->group(function () {
+
+            Route::post('photo', [StudentPhotoController::class, 'upload']);
+            Route::delete('photo', [StudentPhotoController::class, 'delete']);
+        });
+        
     });
 });
