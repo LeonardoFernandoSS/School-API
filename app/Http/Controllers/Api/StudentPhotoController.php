@@ -4,15 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Enums\AbilityEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Student\UploadRequest;
-use App\Services\StudentPhotoService;
+use App\Http\Requests\Photo\UploadRequest;
+use App\Services\UserPhotoService;
 use App\Services\StudentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class StudentPhotoController extends Controller
 {
-    public function __construct(private StudentService $studentService, private StudentPhotoService $studentPhotoService)
+    public function __construct(private StudentService $studentService, private UserPhotoService $userPhotoService)
     {
         $this->middleware('ability:' . AbilityEnum::STUDENT_MANAGE);
     }
@@ -23,9 +23,9 @@ class StudentPhotoController extends Controller
 
         $student = $this->studentService->findStudent($student_id);
 
-        $student = $this->studentPhotoService->uploadStudentPhoto($student, $photo);
+        $user = $this->userPhotoService->uploadUserPhoto($student->user, $photo);
 
-        $headers = ["Location" => $student->user->photo_url];
+        $headers = ["Location" => $user->photo_url];
 
         return response()->json('Successfully uploaded', Response::HTTP_OK, $headers);
     }
@@ -34,7 +34,7 @@ class StudentPhotoController extends Controller
     {
         $student = $this->studentService->findStudent($id);
 
-        $this->studentPhotoService->deleteStudentPhoto($student);
+        $this->userPhotoService->deleteUserPhoto($student->user);
 
         return response()->json(status: Response::HTTP_NO_CONTENT);
     }

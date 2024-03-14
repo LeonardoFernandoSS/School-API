@@ -44,7 +44,7 @@ class StudentRepository extends EloquentGenericRepository implements StudentRepo
     {
         return DB::transaction(function () use ($student, $data) {
 
-            $student->user->update(Arr::only($data, ['name', 'email', 'photo_path']));
+            $student->user->update(Arr::only($data, ['name', 'email']));
 
             return $student;
         });
