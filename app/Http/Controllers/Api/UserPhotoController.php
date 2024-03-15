@@ -15,6 +15,7 @@ class UserPhotoController extends Controller
     public function __construct(private UserService $userService, private UserPhotoService $userPhotoService)
     {
         $this->middleware('ability:' . AbilityEnum::USER_MANAGE);
+        $this->middleware('manage.user');
     }
 
     public function upload(UploadRequest $request, int $user_id): JsonResponse

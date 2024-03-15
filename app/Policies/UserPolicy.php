@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Enums\AbilityEnum;
-use App\Models\Student;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
-class StudentPolicy
+class UserPolicy
 {
     /**
      * Create a new policy instance.
@@ -16,13 +16,13 @@ class StudentPolicy
         //
     }
 
-    public function manageStudent(User $user, Student $model)
+    public function manageUser(User $user, User $model)
     {
         return $user->id != $model->id;
     }
 
     public function listDeleted(User $user)
     {
-        return $user->tokenCan(AbilityEnum::STUDENT_MANAGE);
+        return $user->tokenCan(AbilityEnum::USER_MANAGE);
     }
 }

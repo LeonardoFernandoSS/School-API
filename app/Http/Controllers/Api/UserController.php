@@ -21,6 +21,7 @@ class UserController extends Controller
         $this->middleware('ability:' . AbilityEnum::USER);
         $this->middleware('ability:' . AbilityEnum::USER_MANAGE)->except(['index', 'show']);
         $this->middleware('ability:' . AbilityEnum::USER_DETAIL)->only('show');
+        $this->middleware('manage.user')->only('update', 'destroy');
     }
 
     public function index(SearchRequest $request): JsonResponse

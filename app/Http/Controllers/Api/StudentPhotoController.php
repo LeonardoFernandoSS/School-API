@@ -15,6 +15,7 @@ class StudentPhotoController extends Controller
     public function __construct(private StudentService $studentService, private UserPhotoService $userPhotoService)
     {
         $this->middleware('ability:' . AbilityEnum::STUDENT_MANAGE);
+        $this->middleware('manage.student');
     }
 
     public function upload(UploadRequest $request, int $student_id): JsonResponse

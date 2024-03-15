@@ -21,6 +21,7 @@ class StudentController extends Controller
         $this->middleware('ability:' . AbilityEnum::STUDENT);
         $this->middleware('ability:' . AbilityEnum::STUDENT_MANAGE)->except(['index', 'show']);
         $this->middleware('ability:' . AbilityEnum::STUDENT_DETAIL)->only('show');
+        $this->middleware('manage.student')->only('update', 'destroy');
     }
 
     public function index(SearchRequest $request): JsonResponse

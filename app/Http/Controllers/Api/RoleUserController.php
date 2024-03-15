@@ -19,6 +19,7 @@ class RoleUserController extends Controller
     ) {
         $this->middleware('ability:' . AbilityEnum::ROLE);
         $this->middleware('ability:' . AbilityEnum::ROLE_MANAGE);
+        $this->middleware('manage.user')->only('update', 'destroy');
     }
 
     public function sync(SyncRequest $request, string $id): JsonResponse
