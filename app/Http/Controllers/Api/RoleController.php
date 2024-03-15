@@ -19,6 +19,7 @@ class RoleController extends Controller
     {
         $this->middleware('ability:' . AbilityEnum::ROLE);
         $this->middleware('ability:' . AbilityEnum::ROLE_MANAGE)->except(['index', 'show']);
+        $this->middleware('delete.role')->only('destroy');
     }
 
     public function index(SearchRequest $request): JsonResponse

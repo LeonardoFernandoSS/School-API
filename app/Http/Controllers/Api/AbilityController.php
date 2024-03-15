@@ -16,6 +16,7 @@ class AbilityController extends Controller
     public function __construct(private AbilityService $abilityService)
     {
         $this->middleware('ability:' . AbilityEnum::ABILITY);
+        $this->middleware('delete.ability')->only('destroy');
     }
 
     public function index(SearchRequest $request): JsonResponse

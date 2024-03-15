@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Gate;
 
 class AbilityResource extends JsonResource
 {
@@ -17,6 +18,7 @@ class AbilityResource extends JsonResource
         return [
             "id"        => $this->id,
             "name"      => $this->name,
+            "erasable"  => Gate::denies('deleteAbility', $this),
         ];
     }
 }

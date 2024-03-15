@@ -66,5 +66,10 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'abilities' => \Laravel\Sanctum\Http\Middleware\CheckAbilities::class,
         'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
+
+        'manage.user' => \App\Http\Middleware\ManageUserMiddleware::class,
+        'manage.student' => \App\Http\Middleware\ManageStudentMiddleware::class,
+        'delete.ability' => \App\Http\Middleware\DeleteAbilityMiddleware::class,
+        'delete.role' => \App\Http\Middleware\DeleteRoleMiddleware::class,        
     ];
 }
