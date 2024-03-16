@@ -77,8 +77,6 @@ GET localhost:8000/api/v1/student/
 - Token: 9|oqjQT4RNddgIdw64wGsyqlq4hEbiMkEmECv072mzad780480
 - User Login
 
-Endpoint:
-
 ### User login
 **Endpoint:**
 ```http
