@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\RoleEnum;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -16,14 +17,14 @@ class UserSeeder extends Seeder
     {
         User::factory(5)->create()->each(function (User $user) {
             
-            $role = Role::where('name', 'admin')->first();
+            $role = Role::where('name', RoleEnum::ADMIN)->first();
 
             $user->roles()->sync($role->id);
         });
 
         User::factory(5)->create()->each(function (User $user) {
             
-            $role = Role::where('name', 'professor')->first();
+            $role = Role::where('name', RoleEnum::PROFESSOR)->first();
 
             $user->roles()->sync($role->id);
         });

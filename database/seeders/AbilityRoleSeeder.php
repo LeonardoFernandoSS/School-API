@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\AbilityEnum;
+use App\Enums\RoleEnum;
 use App\Models\Ability;
 use App\Models\Role;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -20,7 +21,7 @@ class AbilityRoleSeeder extends Seeder
         $abilitiesAdmin = Ability::get();
 
         /** @var Role */
-        $roleAdmin = Role::where('name', 'admin')->first();
+        $roleAdmin = Role::where('name', RoleEnum::ADMIN)->first();
 
         $roleAdmin->abilities()->sync($abilitiesAdmin->pluck('id'));
 
@@ -28,7 +29,7 @@ class AbilityRoleSeeder extends Seeder
         $abilitiesProfessor = Ability::whereIn('name', [AbilityEnum::STUDENT, AbilityEnum::STUDENT_DETAIL])->get();
 
         /** @var Role */
-        $roleProfessor = Role::where('name', 'professor')->first();
+        $roleProfessor = Role::where('name', RoleEnum::PROFESSOR)->first();
 
         $roleProfessor->abilities()->sync($abilitiesProfessor->pluck('id'));
     }

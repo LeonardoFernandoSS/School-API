@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\RoleEnum;
 use App\Models\Role;
 use App\Models\Student;
 use App\Models\User;
@@ -19,7 +20,7 @@ class StudentSeeder extends Seeder
             
             Student::factory()->create(['user_id' => $user->id]);
 
-            $role = Role::where('name', 'student')->first();
+            $role = Role::where('name', RoleEnum::STUDENT)->first();
             
             $user->roles()->sync($role->id);
         });
