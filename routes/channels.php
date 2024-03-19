@@ -19,3 +19,4 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 });
 
 Broadcast::channel('student', fn () => true);
+Broadcast::channel('user', fn () => true);
