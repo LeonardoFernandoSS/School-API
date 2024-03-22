@@ -25,6 +25,16 @@ class UserRepository extends EloquentGenericRepository implements UserRepository
         return $query->paginate($perPage, ['*'], 'page', $page);
     }
 
+    public function findByEmail(string $email): ?User
+    {
+        return User::where('email', $email)->first();
+    }
+
+    public function findByToken(string $token): ?User
+    {
+        return User::where('token', $token)->first();
+    }
+
     public function delete(Model $student): User
     {
         $student->user->status = StatusEnum::DELETE;
