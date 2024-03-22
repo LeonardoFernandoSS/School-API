@@ -7,9 +7,11 @@ namespace App\Models;
 use App\Models\Scopes\UserScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -27,6 +29,7 @@ class User extends Authenticatable
         'email',
         'photo_path',
         'password',
+        'token',
         'status',
     ];
 
@@ -65,7 +68,7 @@ class User extends Authenticatable
         return $this->hasOne(Student::class);
     }
 
-    public function abilities(): BelongsToMany
+    public function abilities(): Collection
     {
         return $this->roles->map->abilities->flatten()->unique('name');
     }

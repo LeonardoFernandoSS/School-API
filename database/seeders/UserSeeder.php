@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -15,7 +16,10 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(5)->create()->each(function (User $user) {
+        User::factory(1)->create([
+            'email' => 'admin@email',
+            'password' => Hash::make('password'),
+        ])->each(function (User $user) {
             
             $role = Role::where('name', RoleEnum::ADMIN)->first();
 
