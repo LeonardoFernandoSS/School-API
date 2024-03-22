@@ -10,11 +10,6 @@ use Laravel\Sanctum\NewAccessToken;
 
 class AuthService
 {
-    public function __construct(
-        private StudentRepositoryInterface $studentRepository
-    ) {
-    }
-
     public function loginUser(array $credentials): NewAccessToken
     {
         if (Auth::attempt($credentials)) {
