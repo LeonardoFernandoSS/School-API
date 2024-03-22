@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\AuthService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -13,7 +14,7 @@ class AuthController extends Controller
     {
     }
 
-    public function login(Request $request)
+    public function login(Request $request): JsonResponse
     {
         $credentials = $request->only('email', 'password');
 
@@ -24,7 +25,7 @@ class AuthController extends Controller
         return response()->json('Authorized', Response::HTTP_OK, $headers);
     }
 
-    public function logout()
+    public function logout(): JsonResponse
     {
         $this->authService->logoutUser();
 
