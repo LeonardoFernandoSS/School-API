@@ -25,6 +25,7 @@ class UserService
     {
         $data['password'] = Hash::make('password');
         $data['remember_token'] = Str::random(10);
+        $data['token'] = Str::random(4);
 
         return $this->userRepository->create($data);
     }

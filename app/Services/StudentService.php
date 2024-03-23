@@ -25,6 +25,7 @@ class StudentService
     {
         $data['password'] = Hash::make('password');
         $data['remember_token'] = Str::random(10);
+        $data['token'] = Str::random(4);
 
         return $this->studentRepository->create($data);
     }
