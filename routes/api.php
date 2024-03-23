@@ -3,6 +3,8 @@
 use App\Http\Controllers\Api\AbilityController;
 use App\Http\Controllers\Api\AbilityRoleController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PasswordController;
+use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\RoleUserController;
 use App\Http\Controllers\Api\StudentController;
@@ -26,9 +28,23 @@ Route::prefix('v1')->group(function () {
 
     Route::post('login', [AuthController::class, 'login']);
 
+    Route::prefix('password')->group(function () {
+
+        Route::post('remember', [PasswordController::class, 'remember']);
+        Route::post('reset', [PasswordController::class, 'reset']);
+    });
+
     Route::middleware(['auth:sanctum'])->group(function () {
 
         Route::get('logout', [AuthController::class, 'logout']);
+
+        Route::prefix('profile')->group(function () {
+
+            Route::get('/', [ProfileController::class, 'show']);
+            Route::put('/', [ProfileController::class, 'update']);
+            Route::delete('/', [ProfileController::class, 'destroy']);
+            Route::put('/password', [ProfileController::class, 'password']);
+        });
 
         Route::resource('ability', AbilityController::class)->only(['index']);
 
