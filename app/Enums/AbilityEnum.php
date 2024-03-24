@@ -13,4 +13,11 @@ abstract class AbilityEnum
     const STUDENT = 'student';
     const STUDENT_DETAIL = 'student-detail';
     const STUDENT_MANAGE = 'student-manage';
+
+    public static function toArray()
+    {
+        $reflectionClass = new \ReflectionClass(static::class);
+        
+        return $reflectionClass->getConstants();
+    }
 }

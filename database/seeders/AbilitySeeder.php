@@ -14,8 +14,10 @@ class AbilitySeeder extends Seeder
      */
     public function run(): void
     {
-        Ability::create(['name' => AbilityEnum::STUDENT]);
-        Ability::create(['name' => AbilityEnum::STUDENT_DETAIL]);
-        Ability::create(['name' => AbilityEnum::STUDENT_MANAGE]);
+        $abilitiesEnum = AbilityEnum::toArray();
+
+        foreach ($abilitiesEnum as $value) {
+            Ability::create(['name' => $value]);
+        }
     }
 }
