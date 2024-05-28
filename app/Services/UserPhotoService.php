@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
 
 class UserPhotoService
 {
@@ -35,6 +36,10 @@ class UserPhotoService
     private function handlerUploadPhoto(UploadedFile $photo, User $user): string|false
     {
         $name = time() . '.webp';
+
+        $image = Image::read($photo->getPath());
+        $image->resizeCanvas(512, 512);
+        $image->save($photo->getPath());
 
         $path = Storage::putFileAs(self::BASE_PHOTO_PATH, $photo, $name);
 
