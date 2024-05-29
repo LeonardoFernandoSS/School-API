@@ -11,6 +11,9 @@ use Intervention\Image\Laravel\Facades\Image;
 class UserPhotoService
 {
     const BASE_PHOTO_PATH = "upload/photos/user";
+    const FILE_EXTENSION = ".webp";
+    const PHOTO_WIDTH = 512;
+    const PHOTO_HEIGHT = 512;
 
     public function __construct(
         private UserRepositoryInterface $userRepository
@@ -35,10 +38,10 @@ class UserPhotoService
 
     private function handlerUploadPhoto(UploadedFile $photo, User $user): string|false
     {
-        $name = time() . '.webp';
+        $name = time() . self::FILE_EXTENSION;
 
         $image = Image::read($photo->getPath());
-        $image->resizeCanvas(512, 512);
+        $image->resizeCanvas(self::PHOTO_WIDTH, self::PHOTO_HEIGHT);
         $image->save($photo->getPath());
 
         $path = Storage::putFileAs(self::BASE_PHOTO_PATH, $photo, $name);
