@@ -26,11 +26,24 @@ class AbilityRoleSeeder extends Seeder
         $roleAdmin->abilities()->sync($abilitiesAdmin->pluck('id'));
 
         /** @var Collection */
-        $abilitiesProfessor = Ability::whereIn('name', [AbilityEnum::STUDENT, AbilityEnum::STUDENT_DETAIL])->get();
+        $abilitiesTeacher = Ability::whereIn('name', [
+            AbilityEnum::STUDENT, 
+            AbilityEnum::STUDENT_DETAIL,
+            AbilityEnum::COURSE,
+            AbilityEnum::COURSE_DETAIL,
+            AbilityEnum::ENROLLMENT,
+            AbilityEnum::ENROLLMENT_DETAIL,
+            AbilityEnum::DISCIPLINE,
+            AbilityEnum::DISCIPLINE_DETAIL,
+            AbilityEnum::CURRICULUM,
+            AbilityEnum::CURRICULUM_DETAIL,
+            AbilityEnum::CLASSROOM,
+            AbilityEnum::CLASSROOM_DETAIL,
+        ])->get();
 
         /** @var Role */
-        $roleProfessor = Role::where('name', RoleEnum::PROFESSOR)->first();
+        $roleTeacher = Role::where('name', RoleEnum::TEACHER)->first();
 
-        $roleProfessor->abilities()->sync($abilitiesProfessor->pluck('id'));
+        $roleTeacher->abilities()->sync($abilitiesTeacher->pluck('id'));
     }
 }
