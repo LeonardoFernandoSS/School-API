@@ -24,6 +24,14 @@ class DatabaseSeeder extends Seeder
             AbilityRoleSeeder::class,
             UserSeeder::class,
             StudentSeeder::class,
+            TeacherSeeder::class,
+            PeriodSeeder::class,
+            CourseSeeder::class,
+            DisciplineSeeder::class,
+            CurriculumSeeder::class,
+            ClassroomSeeder::class,
+            EnrollmentSeeder::class,
+            ClassroomEnrollmentSeeder::class,
         ]);
 
         Model::setEventDispatcher(Event::getFacadeRoot());
