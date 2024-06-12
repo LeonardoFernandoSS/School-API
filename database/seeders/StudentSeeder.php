@@ -6,7 +6,6 @@ use App\Enums\RoleEnum;
 use App\Models\Role;
 use App\Models\Student;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class StudentSeeder extends Seeder
@@ -16,7 +15,7 @@ class StudentSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(10)->create()->each(function (User $user) {
+        User::factory(30)->create()->each(function (User $user) {
             
             Student::factory()->create(['user_id' => $user->id]);
 
