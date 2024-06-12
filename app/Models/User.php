@@ -68,6 +68,11 @@ class User extends Authenticatable
         return $this->hasOne(Student::class);
     }
 
+    public function teacher(): HasOne
+    {
+        return $this->hasOne(Teacher::class);
+    }
+
     public function abilities(): Collection
     {
         return $this->roles->map->abilities->flatten()->unique('name');
